@@ -147,6 +147,7 @@ library(&quot;raster&quot;)</code></pre>
 ##  Linking to sp version: 1.2-3</code></pre>
 <pre class="r"><code>library(&quot;neonAOP&quot;)
 
+sink(paste0(format(Sys.time(), &quot;%Y-%m-%d_%H%M%S&quot;), &quot;_sessionInfo.txt&quot;))
 sessionInfo()</code></pre>
 <pre><code>## R version 3.3.0 (2016-05-03)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
@@ -167,6 +168,7 @@ sessionInfo()</code></pre>
 ##  [5] formatR_1.4     magrittr_1.5    evaluate_0.9    stringi_1.1.1  
 ##  [9] rmarkdown_0.9.6 tools_3.3.0     stringr_1.0.0   yaml_2.1.13    
 ## [13] htmltools_0.3.5 knitr_1.13</code></pre>
+<pre class="r"><code>sink()</code></pre>
 <div id="objective-1" class="section level3">
 <h3>Objective #1</h3>
 <pre class="r"><code># set path to file
