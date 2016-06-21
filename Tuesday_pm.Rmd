@@ -5,7 +5,7 @@ date: "June 21, 2016"
 output: html_document
 ---
 
-### Objetives
+## Objetives
 Start by putting up objectives/tasks that students will be working though:
 
 1. Import a raster — A lidar canopy height model (lidar/Teak_lidarCHM.tif)
@@ -13,12 +13,60 @@ Start by putting up objectives/tasks that students will be working though:
 1. For the CHM, set values == 0 to NA (not trees)
 Classify the raster according to some distribution – low medium and tall trees. This could be done using a histogram potentially or we could just decide that <2m is generally grasses / understory, <6m small trees,and the rest are tall trees. A function could import the desired thresholds. Visualize histogram/density and plot vertical cutoff lines.
 
-1. Take the chm and create a hillshade (http://neon-workwithdata.github.io/neon-data-institute-2016/R/create-hillshade-R/)
-
-1. PLOT - layer the classified raster on top of the hillshade, add a legend for each “class” - legends are super tricky to simplifying this process with a function would be good. see: http://neon-workwithdata.github.io/neon-data-institute-2016/R/classify-by-threshold-R/  for my take on forcing a legend outside of the plot area using par settings. You may have other better forms of magic to make this work well. :)
+1. PLOT - layer the classified raster, add a legend for each “class” - legends are super tricky to simplifying this process with a function would be good. see: http://neon-workwithdata.github.io/neon-data-institute-2016/R/classify-by-threshold-R/  for my take on forcing a legend outside of the plot area using par settings. You may have other better forms of magic to make this work well. :)
 
 1. Export the plot figure to a pdf – publishable
 
-1. Export the classified raster as a geotiff with NaFlagg = -9999 to an outputs folder.
+1. Export the classified raster as a geotiff with NaFlag = -9999 to an outputs folder.
 
+```{r housekeeping}
+set.seed(9862144)
+setwd("~/Desktop/Projects/NEON-2016/NEONDI-2016/Tuesday_pm/")
+library("raster")
+library("rgdal")
+library("neonAOP")
+```
 
+### Objective \#1
+
+```{r Objective_1}
+# set path to file
+TEAK_file <- "../NEONdata/D17-California/TEAK/2013/lidar/TEAK_lidarCHM.tif"
+# import the file using the raster() function
+tchm <- raster(TEAK_file)
+```
+
+### Objective \#2
+
+```{r}
+# set the 0 values to NA
+tchm[tchm == 0] <- NA
+# classify data based on some criterion
+hist(tchm, col = "dodgerblue", breaks = 20, ylim = c(0, 1e4), ylab = "", xlab = "", main = "")
+abline(v = c(2, 6, 15), lwd = 3, lty = 2, col = "red")
+
+# will establish break ranges and convert to matrix
+brackets <- matrix(c(0, 6, 1,
+			6, 10, 2,
+			10, 20, 3,
+			20, 70, 4), 
+			ncol = 3, byrow = TRUE)
+brackets
+
+re_tchm <- reclassify(tchm, brackets)
+```
+### Objective \#3 & \#4
+
+```{r Objective_3}
+pdf(file = "../outputs/TEAK/Teak_CHM_classified.pdf", bg = "white")
+par(xpd = FALSE, mar = c(5, 4, 4, 6))
+plot(re_tchm, col = c("light green", "dark green", "blue", "violet"), legend = FALSE)
+par(xpd = TRUE)
+legend(par()$usr[2], 4103300, legend = c("0 - 6m", "6 - 10m", "10 - 20m", "20 - 70m"), fill = c("light green", "dark green", "blue", "violet"), bty = "n")
+dev.off()
+```
+
+### Objective \#5
+```{r}
+writeRaster(re_tchm, filename = "../outputs/TEAK/Teak_CHM_classified.tif", format = "GTiff", options = "COMPRESS = LZW", overwrite = TRUE, NAflag = -9999)
+```

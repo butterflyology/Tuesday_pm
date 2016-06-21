@@ -123,17 +123,42 @@ $(document).ready(function () {
 </div>
 
 
-<div id="objetives" class="section level3">
-<h3>Objetives</h3>
+<div id="objetives" class="section level2">
+<h2>Objetives</h2>
 <p>Start by putting up objectives/tasks that students will be working though:</p>
 <ol style="list-style-type: decimal">
 <li><p>Import a raster — A lidar canopy height model (lidar/Teak_lidarCHM.tif)</p></li>
 <li><p>For the CHM, set values == 0 to NA (not trees) Classify the raster according to some distribution – low medium and tall trees. This could be done using a histogram potentially or we could just decide that &lt;2m is generally grasses / understory, &lt;6m small trees,and the rest are tall trees. A function could import the desired thresholds. Visualize histogram/density and plot vertical cutoff lines.</p></li>
 <li><p>Take the chm and create a hillshade (<a href="http://neon-workwithdata.github.io/neon-data-institute-2016/R/create-hillshade-R/" class="uri">http://neon-workwithdata.github.io/neon-data-institute-2016/R/create-hillshade-R/</a>)</p></li>
-<li><p>PLOT - layer the classified raster on top of the hillshade, add a legend for each “class” - legends are super tricky to simplifying this process with a function would be good. see: <a href="http://neon-workwithdata.github.io/neon-data-institute-2016/R/classify-by-threshold-R/" class="uri">http://neon-workwithdata.github.io/neon-data-institute-2016/R/classify-by-threshold-R/</a> for my take on forcing a legend outside of the plot area using par settings. You may have other better forms of magic to make this work well. :)</p></li>
+<li><p>PLOT - layer the classified raster, add a legend for each “class” - legends are super tricky to simplifying this process with a function would be good. see: <a href="http://neon-workwithdata.github.io/neon-data-institute-2016/R/classify-by-threshold-R/" class="uri">http://neon-workwithdata.github.io/neon-data-institute-2016/R/classify-by-threshold-R/</a> for my take on forcing a legend outside of the plot area using par settings. You may have other better forms of magic to make this work well. :)</p></li>
 <li><p>Export the plot figure to a pdf – publishable</p></li>
 <li><p>Export the classified raster as a geotiff with NaFlagg = -9999 to an outputs folder.</p></li>
 </ol>
+<pre class="r"><code>set.seed(9862144)
+setwd(&quot;~/Desktop/Projects/NEON-2016/NEONDI-2016/Tuesday_pm/&quot;)
+library(&quot;raster&quot;)</code></pre>
+<pre><code>## Loading required package: sp</code></pre>
+<pre class="r"><code>library(&quot;rgdal&quot;)</code></pre>
+<pre><code>## rgdal: version: 1.1-10, (SVN revision 622)
+##  Geospatial Data Abstraction Library extensions to R successfully loaded
+##  Loaded GDAL runtime: GDAL 1.11.4, released 2016/01/25
+##  Path to GDAL shared files: /Library/Frameworks/R.framework/Versions/3.3/Resources/library/rgdal/gdal
+##  Loaded PROJ.4 runtime: Rel. 4.9.1, 04 March 2015, [PJ_VERSION: 491]
+##  Path to PROJ.4 shared files: /Library/Frameworks/R.framework/Versions/3.3/Resources/library/rgdal/proj
+##  Linking to sp version: 1.2-3</code></pre>
+<pre class="r"><code>library(&quot;neonAOP&quot;)</code></pre>
+<div id="objective-1" class="section level3">
+<h3>Objective #1</h3>
+<pre class="r"><code># set path to file
+TEAK_file &lt;- &quot;../NEONdata/D17-California/TEAK/2013/lidar/TEAK_lidarCHM.tif&quot;
+# import the file using the raster() function
+tchm &lt;- raster(TEAK_file)</code></pre>
+</div>
+<div id="objective-2" class="section level3">
+<h3>Objective #2</h3>
+<pre class="r"><code># set the 0 values to NA
+tchm[tchm == 0] &lt;- NA</code></pre>
+</div>
 </div>
 
 
