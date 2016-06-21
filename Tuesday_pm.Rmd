@@ -25,6 +25,8 @@ setwd("~/Desktop/Projects/NEON-2016/NEONDI-2016/Tuesday_pm/")
 library("raster")
 library("rgdal")
 library("neonAOP")
+
+sessionInfo()
 ```
 
 ### Objective \#1
